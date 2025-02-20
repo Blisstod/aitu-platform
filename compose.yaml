@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_DB: 'postgres'
       POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: '5|Z{ra/$E?v$LQ%L'
+      POSTGRES_PASSWORD: '3N1ZXIiOiJJc3N1ZXIiLC'
     ports:
       - "5432:5432"
     volumes:
@@ -25,7 +25,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://db:5432/postgres'
       SPRING_DATASOURCE_USERNAME: 'postgres'
-      SPRING_DATASOURCE_PASSWORD: '5|Z{ra/$E?v$LQ%L'
+      SPRING_DATASOURCE_PASSWORD: '3N1ZXIiOiJJc3N1ZXIiLC'
 
       # JWT-переменные. Если у вас в коде сделано чтение из application.properties,
       # можно дополнительно подключать в Spring Boot параметр --spring.config.location,
