@@ -2,12 +2,15 @@ package kz.nur.aitu.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import kz.nur.aitu.enums.Role;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -20,7 +23,7 @@ import java.util.Collections;
 public class User extends Auditable implements UserDetails {
 
     @Id
-    @Schema(description = "Уникальный идентификатор пользователя", example = "1")
+    @Schema(description = "Уникальный идентификатор пользователя", example = "6661")
     private Long id; // ID будет с внешнего сервиса
 
     @Column
@@ -47,9 +50,16 @@ public class User extends Auditable implements UserDetails {
     @Schema(description = "Ключ безопасности", example = "mySecretKey123")
     private String securityKey;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
+
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Post> posts;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

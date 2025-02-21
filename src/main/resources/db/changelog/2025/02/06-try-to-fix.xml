@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="drop-images-table" author="aitu">
+        <dropTable tableName="images"/>
+    </changeSet>
+
+    <changeSet id="create-images-table-again" author="aitu">
+        <createTable tableName="images">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_images"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="image_data" type="BYTEA"/>
+            <column name="post_id" type="UUID">
+                <constraints nullable="false"
+                             referencedTableName="posts"
+                             referencedColumnNames="id"
+                             foreignKeyName="fk_images_posts"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

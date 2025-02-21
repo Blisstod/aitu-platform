@@ -1,22 +1,14 @@
 package kz.nur.aitu.service;
 
-import kz.nur.aitu.dto.AuthResponse;
-import kz.nur.aitu.dto.LoginRequest;
-import kz.nur.aitu.dto.RegisterRequest;
 import kz.nur.aitu.dto.UserDto;
 import kz.nur.aitu.entity.User;
 import kz.nur.aitu.exception.ResourceNotFoundException;
-import kz.nur.aitu.exception.UserAlreadyExistsException;
 import kz.nur.aitu.mapper.UserMapper;
 import kz.nur.aitu.repository.UserRepository;
-import kz.nur.aitu.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,5 +43,18 @@ public class UserService {
         User user = userMapper.toEntity(userDto);
         user = userRepository.save(user);
         return userMapper.toDto(user);
+    }
+
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UsernameNotFoundException("Пользователь не аутентифицирован");
+        }
+
+        String email = authentication.getName();
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь с email " + email + " не найден"));
     }
 }
