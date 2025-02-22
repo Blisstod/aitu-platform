@@ -47,10 +47,16 @@ public class ClubController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Получить всех участников клуба, включая администраторов")
+    @Operation(summary = "Получить всех участников клуба")
     @GetMapping("/{clubId}/members")
     public ResponseEntity<List<UserDto>> getAllMembers(@PathVariable UUID clubId) {
         return ResponseEntity.ok(clubService.getAllMembers(clubId));
+    }
+
+    @Operation(summary = "Получить всех админов клуба")
+    @GetMapping("/{clubId}/admins")
+    public ResponseEntity<List<UserDto>> getAllAdmins(@PathVariable UUID clubId) {
+        return ResponseEntity.ok(clubService.getAllAdmins(clubId));
     }
 
     @Operation(summary = "Добавить администратора в клуб")

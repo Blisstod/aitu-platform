@@ -1,0 +1,61 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-club-application-forms" author="aitu">
+        <createTable tableName="club_application_forms">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_by" type="VARCHAR(255)"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="club_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deadline" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="template_content" type="jsonb">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="club_application_forms"
+                                 baseColumnNames="club_id"
+                                 referencedTableName="clubs"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_application_form_club"/>
+    </changeSet>
+
+    <changeSet id="create-club-application-requests" author="aitu">
+        <createTable tableName="club_application_requests">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_by" type="VARCHAR(255)"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="form_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+            </column>
+            <column name="response" type="VARCHAR(50)"/>
+            <column name="response_message" type="VARCHAR(500)"/>
+            <column name="responded_date" type="TIMESTAMP"/>
+            <column name="answer_content" type="jsonb">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="club_application_requests"
+                                 baseColumnNames="form_id"
+                                 referencedTableName="club_application_forms"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_application_request_form"/>
+    </changeSet>
+</databaseChangeLog>

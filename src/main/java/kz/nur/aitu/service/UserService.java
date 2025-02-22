@@ -44,17 +44,4 @@ public class UserService {
         user = userRepository.save(user);
         return userMapper.toDto(user);
     }
-
-    public User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new UsernameNotFoundException("Пользователь не аутентифицирован");
-        }
-
-        String email = authentication.getName();
-
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь с email " + email + " не найден"));
-    }
 }

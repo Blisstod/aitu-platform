@@ -7,6 +7,7 @@ import kz.nur.aitu.entity.User;
 import kz.nur.aitu.mapper.PostMapper;
 import kz.nur.aitu.repository.PostRepository;
 import kz.nur.aitu.repository.UserRepository;
+import kz.nur.aitu.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,12 +32,14 @@ public class PostService {
     private ImageService imageService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private SecurityUtils securityUtils;
 
     @Transactional
     public PostDto createPost(MultipartFile image, String title, String description) throws IOException {
         UUID imageId = imageService.uploadImage(image);
 
-        User user = userService.getCurrentUser();
+        User user = securityUtils.getCurrentUser();
 
         Post post = new Post();
         post.setTitle(title);

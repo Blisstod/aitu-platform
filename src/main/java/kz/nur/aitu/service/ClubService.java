@@ -11,6 +11,7 @@ import kz.nur.aitu.mapper.ClubMapper;
 import kz.nur.aitu.mapper.UserMapper;
 import kz.nur.aitu.repository.ClubRepository;
 import kz.nur.aitu.repository.UserRepository;
+import kz.nur.aitu.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,8 @@ public class ClubService {
     private UserMapper userMapper;
     @Autowired
     private UserService userService;
+    @Autowired
+    private SecurityUtils securityUtils;
 
     @Operation(summary = "Получить список всех клубов")
     public List<ClubDto> getAllClubs() {
@@ -58,7 +61,7 @@ public class ClubService {
             club.setStatus(ClubStatus.ACTIVE);
         }
 
-        club.setAdmins(Collections.singletonList(userService.getCurrentUser()));
+        club.setAdmins(Collections.singletonList(securityUtils.getCurrentUser()));
 
         return clubMapper.toDto(clubRepository.save(club));
     }
@@ -124,8 +127,18 @@ public class ClubService {
         return clubMapper.toDto(club);
     }
 
-    @Operation(summary = "Получить всех участников клуба, включая администраторов")
+    @Operation(summary = "Получить всех участников клуба")
     public List<UserDto> getAllMembers(UUID clubId) {
+        Club club = clubRepository.findById(clubId)
+                .orElseThrow(() -> new RuntimeException("Клуб не найден"));
+
+        return club.getMembers().stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Operation(summary = "Получить всех админов клуба")
+    public List<UserDto> getAllAdmins(UUID clubId) {
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(() -> new RuntimeException("Клуб не найден"));
 

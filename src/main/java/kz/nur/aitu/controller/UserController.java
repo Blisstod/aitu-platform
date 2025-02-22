@@ -2,10 +2,12 @@ package kz.nur.aitu.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.ServletRequest;
 import kz.nur.aitu.dto.UserDto;
 import kz.nur.aitu.entity.User;
 import kz.nur.aitu.mapper.UserMapper;
 import kz.nur.aitu.service.UserService;
+import kz.nur.aitu.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +23,12 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private SecurityUtils securityUtils;
 
     @GetMapping
     @Operation(summary = "Получить всех пользователей", description = "Возвращает список всех зарегистрированных пользователей")
-    public ResponseEntity<List<UserDto>> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers(ServletRequest servletRequest) {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
@@ -42,6 +46,6 @@ public class UserController {
 
     @GetMapping("/visitor")
     public ResponseEntity<UserDto> getVisitor() {
-        return ResponseEntity.ok(userMapper.toDto(userService.getCurrentUser()));
+        return ResponseEntity.ok(userMapper.toDto(securityUtils.getCurrentUser()));
     }
 }
