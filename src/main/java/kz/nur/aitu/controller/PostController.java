@@ -1,6 +1,7 @@
 package kz.nur.aitu.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kz.nur.aitu.dto.PostDto;
 import kz.nur.aitu.entity.Post;
 import kz.nur.aitu.mapper.PostMapper;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/rest/posts")
+@Tag(name = "Посты", description = "API для постов")
 //@RequiredArgsConstructor
 public class PostController {
 

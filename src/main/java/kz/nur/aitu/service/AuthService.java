@@ -5,6 +5,7 @@ import kz.nur.aitu.dto.LoginRequest;
 import kz.nur.aitu.dto.RegisterRequest;
 import kz.nur.aitu.dto.UserDto;
 import kz.nur.aitu.entity.User;
+import kz.nur.aitu.enums.Role;
 import kz.nur.aitu.exception.UserAlreadyExistsException;
 import kz.nur.aitu.mapper.UserMapper;
 import kz.nur.aitu.repository.UserRepository;
@@ -43,6 +44,8 @@ public class AuthService {
         User newUser = userMapper.toEntity(moodleUser);
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setSecurityKey(request.getSecurityKey());
+
+        newUser.setRole(request.getRole() != null ? request.getRole() : Role.USER);
 
         userRepository.save(newUser);
         return userMapper.toDto(newUser);

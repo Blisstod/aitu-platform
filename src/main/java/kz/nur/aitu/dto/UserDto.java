@@ -1,6 +1,7 @@
 package kz.nur.aitu.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import kz.nur.aitu.enums.Role;
 import lombok.*;
 
 @Data
@@ -26,4 +27,7 @@ public class UserDto {
 
     @Schema(description = "Ключ безопасности", example = "mySecretKey123")
     private String securityKey;
+
+    @Schema(description = "Роль пользователя", example = "USER")
+    private Role role;
 }

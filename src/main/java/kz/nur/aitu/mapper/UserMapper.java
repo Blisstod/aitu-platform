@@ -10,6 +10,7 @@ public interface UserMapper {
     UserDto toDto(User user);
 
     @Mapping(target = "password", ignore = true)
-    @Mapping(target = "securityKey", ignore = true) 
+    @Mapping(target = "securityKey", ignore = true)
+    @Mapping(target = "role", ignore = true)
     User toEntity(UserDto userDto);
 }

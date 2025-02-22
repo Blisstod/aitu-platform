@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -24,7 +23,7 @@ public class User extends Auditable implements UserDetails {
 
     @Id
     @Schema(description = "Уникальный идентификатор пользователя", example = "6661")
-    private Long id; // ID будет с внешнего сервиса
+    private Long id;
 
     @Column
     @Schema(description = "Имя пользователя", example = "John")
@@ -51,7 +50,8 @@ public class User extends Auditable implements UserDetails {
     private String securityKey;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
+    @Schema(description = "Роль пользователя", example = "USER")
     private Role role;
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
