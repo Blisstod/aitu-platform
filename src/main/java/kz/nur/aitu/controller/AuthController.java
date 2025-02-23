@@ -21,11 +21,9 @@ import jakarta.validation.Valid;
 @Tag(name = "Аутентификация", description = "API для входа и регистрации пользователей")
 public class AuthController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     @PostMapping("/register")
     @Operation(summary = "Регистрация пользователя", description = "Создает нового пользователя в системе")
@@ -38,4 +36,6 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
+
+    //mocky
 }

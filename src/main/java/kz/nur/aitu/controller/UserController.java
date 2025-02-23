@@ -3,7 +3,9 @@ package kz.nur.aitu.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.ServletRequest;
+import kz.nur.aitu.dto.ClubDto;
 import kz.nur.aitu.dto.UserDto;
+import kz.nur.aitu.dto.UsersClubDto;
 import kz.nur.aitu.entity.User;
 import kz.nur.aitu.mapper.UserMapper;
 import kz.nur.aitu.service.UserService;
@@ -51,7 +53,9 @@ public class UserController {
     }
 
     @GetMapping("/visitor")
-    public ResponseEntity<UserDto> getVisitor() {
-        return ResponseEntity.ok(userMapper.toDto(securityUtils.getCurrentUser()));
+    @Operation(summary = "Получить клубы текущего пользователя", description = "Возвращает список клубов, где пользователь является админом или участником")
+    public ResponseEntity<UsersClubDto> getUserAndClubs() {
+        User currentUser = securityUtils.getCurrentUser();
+        return ResponseEntity.ok(userService.getUserClubs(currentUser));
     }
 }
