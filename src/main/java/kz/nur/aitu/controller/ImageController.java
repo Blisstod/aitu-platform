@@ -21,13 +21,13 @@ public class ImageController {
 
     private final ImageService imageService;
 
-//    @Operation(summary = "Загрузить изображение",
-//            description = "Принимает multipart/form-data, сохраняет в БД")
-//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
-//        String result = imageService.uploadImage(file);
-//        return ResponseEntity.status(HttpStatus.OK).body(result);
-//    }
+    @Operation(summary = "Загрузить изображение",
+            description = "Принимает multipart/form-data, сохраняет в БД")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UUID> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
+        UUID result = imageService.uploadImage(file);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
     @Operation(summary = "Загрузить изображение из БД по имени",
             description = "Возвращает бинарные данные изображения (считаем, что это PNG).")

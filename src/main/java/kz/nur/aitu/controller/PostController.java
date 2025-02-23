@@ -51,8 +51,8 @@ public class PostController {
 //    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Создать новый пост", description = "Только для пользователей с ролью ADMIN")
-    public PostDto createPost(@RequestPart("image") MultipartFile image, @RequestPart PostCreateDto dto) throws IOException {
-        return postService.createPost(image, dto);
+    public PostDto createPost(@RequestBody PostCreateDto dto) throws IOException {
+        return postService.createPost(dto);
     }
 
     @Operation(summary = "Удалить пост по UUID", description = "Только для пользователей с ролью ADMIN")

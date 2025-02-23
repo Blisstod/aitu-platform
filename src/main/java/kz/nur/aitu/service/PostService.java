@@ -37,15 +37,14 @@ public class PostService {
     private SecurityUtils securityUtils;
 
     @Transactional
-    public PostDto createPost(MultipartFile image, PostCreateDto dto) throws IOException {
-        UUID imageId = imageService.uploadImage(image);
+    public PostDto createPost(PostCreateDto dto) throws IOException {
 
         User user = securityUtils.getCurrentUser();
 
         Post post = new Post();
         post.setTitle(dto.getTitle());
         post.setDescription(dto.getDescription());
-        post.setImageId(imageId);
+        post.setImageId(dto.getImageId());
         post.setUser(user);
         postRepository.save(post);
 
