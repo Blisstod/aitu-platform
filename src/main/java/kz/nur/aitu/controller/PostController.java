@@ -2,6 +2,7 @@ package kz.nur.aitu.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kz.nur.aitu.dto.PostCreateDto;
 import kz.nur.aitu.dto.PostDto;
 import kz.nur.aitu.entity.Post;
 import kz.nur.aitu.mapper.PostMapper;
@@ -50,8 +51,8 @@ public class PostController {
 //    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Создать новый пост", description = "Только для пользователей с ролью ADMIN")
-    public PostDto createPost(@RequestParam("image") MultipartFile image, @RequestParam("title") String title, @RequestParam("content") String content ) throws IOException {
-        return postService.createPost(image, title, content);
+    public PostDto createPost(@RequestPart("image") MultipartFile image, @RequestPart PostCreateDto dto) throws IOException {
+        return postService.createPost(image, dto);
     }
 
     @Operation(summary = "Удалить пост по UUID", description = "Только для пользователей с ролью ADMIN")

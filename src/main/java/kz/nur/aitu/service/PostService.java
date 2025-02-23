@@ -1,5 +1,6 @@
 package kz.nur.aitu.service;
 
+import kz.nur.aitu.dto.PostCreateDto;
 import kz.nur.aitu.dto.PostDto;
 import kz.nur.aitu.entity.Image;
 import kz.nur.aitu.entity.Post;
@@ -36,14 +37,14 @@ public class PostService {
     private SecurityUtils securityUtils;
 
     @Transactional
-    public PostDto createPost(MultipartFile image, String title, String description) throws IOException {
+    public PostDto createPost(MultipartFile image, PostCreateDto dto) throws IOException {
         UUID imageId = imageService.uploadImage(image);
 
         User user = securityUtils.getCurrentUser();
 
         Post post = new Post();
-        post.setTitle(title);
-        post.setDescription(description);
+        post.setTitle(dto.getTitle());
+        post.setDescription(dto.getDescription());
         post.setImageId(imageId);
         post.setUser(user);
         postRepository.save(post);
