@@ -2,8 +2,7 @@ package kz.nur.aitu.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kz.nur.aitu.dto.ClubApplicationFormDto;
-import kz.nur.aitu.dto.ClubApplicationRequestDto;
+import kz.nur.aitu.dto.*;
 import kz.nur.aitu.entity.Club;
 import kz.nur.aitu.entity.ClubApplicationForm;
 import kz.nur.aitu.entity.ClubApplicationRequest;
@@ -45,13 +44,15 @@ public class ClubApplicationService {
     @Autowired
     private SecurityUtils securityUtils;
 
-    public ClubApplicationFormDto createForm(ClubApplicationFormDto dto) {
+    public ClubApplicationFormDto createForm(ClubApplicationFormCreateDto dto) {
         validateJson(dto.getTemplateContent());
 
         Club club = clubRepository.findById(dto.getClubId())
                 .orElseThrow(() -> new RuntimeException("Клуб не найден"));
-        ClubApplicationForm form = mapper.toEntity(dto);
+        ClubApplicationForm form = new ClubApplicationForm();
         form.setClub(club);
+        form.setDeadline(dto.getDeadline());
+        form.setTemplateContent(dto.getTemplateContent());
 
         return mapper.toDto(formRepository.save(form));
     }
@@ -71,13 +72,14 @@ public class ClubApplicationService {
         return list;
     }
 
-    public ClubApplicationRequestDto createRequest(ClubApplicationRequestDto dto) {
+    public ClubApplicationRequestDto createRequest(ClubApplicationRequestCreateDto dto) {
         validateJson(dto.getAnswerContent());
 
         ClubApplicationForm form = formRepository.findById(dto.getFormId())
                 .orElseThrow(() -> new ResourceNotFoundException("Форма не найдена"));
-        ClubApplicationRequest request = mapper.toEntity(dto);
+        ClubApplicationRequest request = new ClubApplicationRequest();
         request.setClubApplicationForm(form);
+        request.setAnswerContent(dto.getAnswerContent());
 
         if (dto.getStatus() == null || dto.getStatus().describeConstable().isEmpty()){
             request.setStatus(RequestStatus.IN_REVIEW);
@@ -86,11 +88,11 @@ public class ClubApplicationService {
         return mapper.toDto(requestRepository.save(request));
     }
 
-    public ClubApplicationRequestDto respondToRequest(UUID requestId, ResponseStatus response, String message) {
-        ClubApplicationRequest request = getRequestById(requestId);
+    public ClubApplicationRequestDto respondToRequest(ClubApplicationRequestResponse dto) {
+        ClubApplicationRequest request = getRequestById(dto.getRequestId());
 
-        request.setResponse(response);
-        request.setResponseMessage(message);
+        request.setResponse(dto.getResponse());
+        request.setResponseMessage(dto.getResponseMessage());
         request.setRespondedDate(LocalDateTime.now());
         request.setStatus(RequestStatus.ANSWERED);
 

@@ -3,8 +3,7 @@ package kz.nur.aitu.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.ServletRequest;
-import kz.nur.aitu.dto.ClubApplicationFormDto;
-import kz.nur.aitu.dto.ClubApplicationRequestDto;
+import kz.nur.aitu.dto.*;
 import kz.nur.aitu.enums.ResponseStatus;
 import kz.nur.aitu.service.ClubApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class ClubApplicationController {
 
     @Operation(summary = "Создать новую форму заявки")
     @PostMapping("/form")
-    public ResponseEntity<ClubApplicationFormDto> createForm(@RequestBody ClubApplicationFormDto dto) {
+    public ResponseEntity<ClubApplicationFormDto> createForm(@RequestBody ClubApplicationFormCreateDto dto) {
         return ResponseEntity.ok(service.createForm(dto));
     }
 
@@ -48,7 +47,7 @@ public class ClubApplicationController {
 
     @Operation(summary = "Студент отправляет заявку на вступление в клуб")
     @PostMapping("/request")
-    public ResponseEntity<ClubApplicationRequestDto> createRequest(@RequestBody ClubApplicationRequestDto dto) {
+    public ResponseEntity<ClubApplicationRequestDto> createRequest(@RequestBody ClubApplicationRequestCreateDto dto) {
         return ResponseEntity.ok(service.createRequest(dto));
     }
 
@@ -65,13 +64,9 @@ public class ClubApplicationController {
     }
 
     @Operation(summary = "Администратор отвечает на заявку студента")
-    @PostMapping("/request/{requestId}/response")
-    public ResponseEntity<ClubApplicationRequestDto> respondToRequest(
-            @PathVariable UUID requestId,
-            @RequestParam("response") ResponseStatus response,
-            @RequestParam("message") String message,
-            ServletRequest servletRequest) {
-        return ResponseEntity.ok(service.respondToRequest(requestId, response, message));
+    @PostMapping("/request/response")
+    public ResponseEntity<ClubApplicationRequestDto> respondToRequest(@RequestBody ClubApplicationRequestResponse dto) {
+        return ResponseEntity.ok(service.respondToRequest(dto));
     }
 
 

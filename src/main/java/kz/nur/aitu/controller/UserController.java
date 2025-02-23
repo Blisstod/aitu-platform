@@ -38,6 +38,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
+    @GetMapping("/by-email")
+    @Operation(summary = "Получить пользователя по email", description = "Возвращает информацию о конкретном пользователе по его email")
+    public ResponseEntity<UserDto> getUserByEmail(@RequestParam("email") String email) {
+        return ResponseEntity.ok(userService.getUserByEmail(email));
+    }
+
     @PostMapping
     @Operation(summary = "Создать пользователя", description = "Создает нового пользователя в системе")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
