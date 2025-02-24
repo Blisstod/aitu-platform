@@ -2,13 +2,17 @@ package kz.nur.aitu.service;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kz.nur.aitu.dto.ClubApplicationFormDto;
 import kz.nur.aitu.dto.ClubDto;
 import kz.nur.aitu.dto.UserDto;
 import kz.nur.aitu.entity.Club;
 import kz.nur.aitu.entity.User;
 import kz.nur.aitu.enums.ClubStatus;
+import kz.nur.aitu.exception.ResourceNotFoundException;
+import kz.nur.aitu.mapper.ClubApplicationMapper;
 import kz.nur.aitu.mapper.ClubMapper;
 import kz.nur.aitu.mapper.UserMapper;
+import kz.nur.aitu.repository.ClubApplicationFormRepository;
 import kz.nur.aitu.repository.ClubRepository;
 import kz.nur.aitu.repository.UserRepository;
 import kz.nur.aitu.util.SecurityUtils;
@@ -31,7 +35,11 @@ public class ClubService {
     @Autowired
     private ClubRepository clubRepository;
     @Autowired
+    private ClubApplicationFormRepository formRepository;
+    @Autowired
     private ClubMapper clubMapper;
+    @Autowired
+    private ClubApplicationMapper applicationMapper;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -50,7 +58,18 @@ public class ClubService {
 
     @Operation(summary = "Получить клуб по ID")
     public Optional<ClubDto> getClubById(UUID id) {
-        return clubRepository.findById(id).map(clubMapper::toDto);
+        return clubRepository.findById(id).map(club -> {
+            ClubDto clubDto = clubMapper.toDto(club);
+
+            // Получаем формы, отсортированные по createdAt DESC
+            List<ClubApplicationFormDto> sortedForms = formRepository.findByClubIdOrderByCreatedAtDesc(id)
+                    .stream()
+                    .map(applicationMapper::toDto)
+                    .toList();
+
+            clubDto.setForms(sortedForms);
+            return clubDto;
+        });
     }
 
     @Operation(summary = "Создать новый клуб")

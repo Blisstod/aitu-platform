@@ -64,6 +64,11 @@ public class ClubApplicationService {
         return mapper.toDto(form);
     }
 
+    public List<ClubApplicationFormDto> getAllFormsByClubId(UUID clubId) {
+        List<ClubApplicationForm> forms = formRepository.findByClubId(clubId);
+        return forms.stream().map(form -> mapper.toDto(form)).collect(Collectors.toList());
+    }
+
     public List<ClubApplicationRequestDto> getRequestsByFormId(UUID formId) {
         List<ClubApplicationRequestDto> list = requestRepository.findByClubApplicationFormId(formId)
                 .stream()

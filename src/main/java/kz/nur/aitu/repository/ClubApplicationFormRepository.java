@@ -10,5 +10,6 @@ import java.util.UUID;
 public interface ClubApplicationFormRepository extends JpaRepository<ClubApplicationForm, UUID> {
     List<ClubApplicationForm> findByClubId(UUID clubId);
     List<ClubApplicationForm> findByCreatedBy(String createdBy);
+    List<ClubApplicationForm> findByClubIdOrderByCreatedAtDesc(UUID clubId);
 }
 

@@ -29,6 +29,9 @@ public class ClubDto {
     @Schema(description = "Список участников клуба")
     private List<UserDto> members;
 
+    @Schema(description = "List of forms")
+    private List<ClubApplicationFormDto> forms;
+
     @Schema(description = "Статус клуба", example = "ACTIVE")
     private String status;
 }

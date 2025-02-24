@@ -33,6 +33,12 @@ public class ClubApplicationController {
         return ResponseEntity.ok(service.getFormById(id));
     }
 
+    @Operation(summary = "Get all forms by club id")
+    @GetMapping("/form/club/{clubId}")
+    public ResponseEntity<List<ClubApplicationFormDto>> getFormsByClubId(@PathVariable UUID clubId) {
+        return ResponseEntity.ok(service.getAllFormsByClubId(clubId));
+    }
+
     @Operation(summary = "Получить заявки пользователя")
     @GetMapping("/form/visitor")
     public ResponseEntity<List<ClubApplicationFormDto>> getFormsByVisitor() {
