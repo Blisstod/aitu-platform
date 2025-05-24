@@ -15,7 +15,7 @@ public class MoodleService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private static final String MOODLE_BASE_URL = "https://moodle.astanait.edu.kz/webservice/rest/server.php";
+    private static final String MOODLE_BASE_URL = "http://localhost:8888/webservice/rest/server.php";
 
     public UserDto getUserInfoFromMoodle(String securityKey) {
         String siteInfoUrl = MOODLE_BASE_URL +
