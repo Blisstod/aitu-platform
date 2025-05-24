@@ -18,6 +18,8 @@ public interface ClubMapper {
     @Mapping(target = "admins", source = "admins")
     @Mapping(target = "members", source = "members")
     @Mapping(target = "status", source = "status")
+    @Mapping(target = "imageIds",
+            expression = "java(club.getImages().stream().map(img -> img.getId()).toList())")
     ClubDto toDto(Club club);
 
     @Mapping(target = "admins", ignore = true)
