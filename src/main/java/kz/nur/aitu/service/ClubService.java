@@ -7,6 +7,7 @@ import kz.nur.aitu.dto.ClubDto;
 import kz.nur.aitu.dto.UserDto;
 import kz.nur.aitu.entity.Club;
 import kz.nur.aitu.entity.User;
+import kz.nur.aitu.entity.Image;
 import kz.nur.aitu.enums.ClubStatus;
 import kz.nur.aitu.exception.ResourceNotFoundException;
 import kz.nur.aitu.mapper.ClubApplicationMapper;
@@ -20,12 +21,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.zip.DataFormatException;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +52,7 @@ public class ClubService {
     private UserService userService;
     @Autowired
     private SecurityUtils securityUtils;
+    private final ImageService imageService;
 
     @Operation(summary = "Получить список всех клубов")
     public List<ClubDto> getAllClubs() {
@@ -78,6 +83,13 @@ public class ClubService {
 
         if (clubDto.getStatus() == null || clubDto.getStatus().isBlank()) {
             club.setStatus(ClubStatus.ACTIVE);
+        }
+
+        if (clubDto.getImageIds() != null) {
+            List<Image> imgs = clubDto.getImageIds().stream()
+                    .map(imageService::getImageEntity)
+                    .collect(Collectors.toList());
+            club.setImages(imgs);
         }
 
         club.setAdmins(Collections.singletonList(securityUtils.getCurrentUser()));
@@ -165,4 +177,42 @@ public class ClubService {
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void addImageToClub(UUID clubId, UUID imageId) {
+        Club club = clubRepository.findById(clubId)
+                .orElseThrow(() -> new ResourceNotFoundException("Клуб не найден"));
+        Image img = imageService.getImageEntity(imageId);
+        club.getImages().add(img);
+        clubRepository.save(club);
+    }
+
+//    public UUID addClubImage(UUID clubId, MultipartFile file) throws IOException {
+//        Club club = clubRepository.findById(clubId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Клуб не найден"));
+//        UUID imageId = imageService.uploadImage(file);
+//        club.getImages().add(imageService.getImageEntity(imageId));
+//        // возможно, вы захотите сразу флешнуть entityManager, но save() тоже ок
+//        clubRepository.save(club);
+//        return imageId;
+//    }
+
+    public List<UUID> listClubImages(UUID clubId) {
+        return clubRepository.findById(clubId)
+                .orElseThrow(() -> new ResourceNotFoundException("Клуб не найден"))
+                .getImages().stream()
+                .map(Image::getId)
+                .toList();
+    }
+
+//    public byte[] downloadClubImage(UUID clubId, UUID imageId) throws IOException, DataFormatException {
+//        Club club = clubRepository.findById(clubId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Клуб не найден"));
+//        boolean contains = club.getImages().stream()
+//                .anyMatch(img -> img.getId().equals(imageId));
+//        if (!contains) {
+//            throw new ResourceNotFoundException("Фото не принадлежит этому клубу");
+//        }
+//        return imageService.downloadImage(imageId);
+//    }
 }

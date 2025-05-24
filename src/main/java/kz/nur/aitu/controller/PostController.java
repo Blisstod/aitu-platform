@@ -11,6 +11,7 @@ import kz.nur.aitu.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,5 +61,10 @@ public class PostController {
     @DeleteMapping("/{id}")
     public void deletePost(@PathVariable UUID id) {
         postService.deletePost(id);
+    }
+
+    @GetMapping("/club/{clubId}")
+    public ResponseEntity<List<PostDto>> getByClub(@PathVariable UUID clubId) {
+        return ResponseEntity.ok(postService.getPostsByClub(clubId));
     }
 }

@@ -11,9 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import kz.nur.aitu.enums.EventFormat;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "events")
@@ -70,6 +68,10 @@ public class Event {
     @Builder.Default
     private Set<User> admins = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "club_id")
+    private Club club; // если null — событие университета
+
     // Аудит-поля (createdBy, createdDate и т.д.) подтянутся автоматически
     @CreatedBy
     private String createdBy;
@@ -82,4 +84,13 @@ public class Event {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "event_images",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
+    @Builder.Default
+    private List<Image> images = new ArrayList<>();
 }

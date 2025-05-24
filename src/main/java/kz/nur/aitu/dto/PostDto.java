@@ -24,6 +24,8 @@ public class PostDto {
     @Schema(description = "Количество лайков", example = "3")
     private int likeCount;
 
+    private UUID clubId;  // null для университета
+
     @Schema(description = "ID пользователя (владельца поста)", example = "6661")
     private Long userId;
 }

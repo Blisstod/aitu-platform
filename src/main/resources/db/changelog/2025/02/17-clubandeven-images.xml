@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="17-add-multi-images-to-club-event" author="migration">
+
+        <!-- join-таблица для клубов -->
+        <createTable tableName="club_images">
+            <column name="club_id" type="uuid"/>
+            <column name="image_id" type="uuid"/>
+        </createTable>
+        <!-- составной PK -->
+        <addPrimaryKey
+                tableName="club_images"
+                columnNames="club_id,image_id"
+                constraintName="pk_club_images"/>
+        <addForeignKeyConstraint
+                baseTableName="club_images"
+                baseColumnNames="club_id"
+                referencedTableName="clubs"
+                referencedColumnNames="id"
+                constraintName="fk_club_images_club"
+                onDelete="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="club_images"
+                baseColumnNames="image_id"
+                referencedTableName="images"
+                referencedColumnNames="id"
+                constraintName="fk_club_images_image"
+                onDelete="CASCADE"/>
+
+        <!-- join-таблица для событий -->
+        <createTable tableName="event_images">
+            <column name="event_id" type="uuid"/>
+            <column name="image_id" type="uuid"/>
+        </createTable>
+        <addPrimaryKey
+                tableName="event_images"
+                columnNames="event_id,image_id"
+                constraintName="pk_event_images"/>
+        <addForeignKeyConstraint
+                baseTableName="event_images"
+                baseColumnNames="event_id"
+                referencedTableName="events"
+                referencedColumnNames="id"
+                constraintName="fk_event_images_event"
+                onDelete="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="event_images"
+                baseColumnNames="image_id"
+                referencedTableName="images"
+                referencedColumnNames="id"
+                constraintName="fk_event_images_image"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+
+</databaseChangeLog>

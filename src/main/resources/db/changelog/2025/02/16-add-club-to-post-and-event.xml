@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="16-add-club-to-post-and-event" author="nur">
+        <addColumn tableName="posts">
+            <column name="club_id" type="uuid"/>
+        </addColumn>
+        <addForeignKeyConstraint
+                baseTableName="posts" baseColumnNames="club_id"
+                referencedTableName="clubs" referencedColumnNames="id"
+                constraintName="fk_post_club"/>
+
+        <addColumn tableName="events">
+            <column name="club_id" type="uuid"/>
+        </addColumn>
+        <addForeignKeyConstraint
+                baseTableName="events" baseColumnNames="club_id"
+                referencedTableName="clubs" referencedColumnNames="id"
+                constraintName="fk_event_club"/>
+    </changeSet>
+
+</databaseChangeLog>

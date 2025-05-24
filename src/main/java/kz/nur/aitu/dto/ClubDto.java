@@ -34,4 +34,6 @@ public class ClubDto {
 
     @Schema(description = "Статус клуба", example = "ACTIVE")
     private String status;
+
+    private List<UUID> imageIds;
 }

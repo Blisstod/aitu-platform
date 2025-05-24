@@ -7,6 +7,8 @@ import kz.nur.aitu.enums.EventFormat;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,8 +38,11 @@ public class EventCreateDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
 
+    private UUID clubId; // необязательно
+
     /** Списки айдишников пользователей (участников и админов) */
     private Set<@NotNull Long> participantIds;
 
     private Set<@NotNull Long> adminIds;
+    private List<UUID> imageIds;
 }

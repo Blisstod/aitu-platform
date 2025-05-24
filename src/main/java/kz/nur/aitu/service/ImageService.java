@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import kz.nur.aitu.entity.Image;
 import kz.nur.aitu.entity.Post;
+import kz.nur.aitu.exception.ResourceNotFoundException;
 import kz.nur.aitu.repository.ImageRepository;
 import kz.nur.aitu.repository.PostRepository;
 import kz.nur.aitu.util.ImageUtils;
@@ -57,5 +58,13 @@ public class ImageService {
                     .addContextValue("Image ID", dbImage.getId())
                     .addContextValue("Image id", id);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Image getImageEntity(UUID id) {
+        return imageRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Изображение не найдено: " + id)
+                );
     }
 }

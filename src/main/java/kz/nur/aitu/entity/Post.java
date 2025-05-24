@@ -34,6 +34,10 @@ public class Post extends Auditable {
     @Column(name = "like_count")
     @Schema(description = "Количество лайков", example = "0")
     private int likeCount;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "club_id")
+    private Club club; // если null — пост университета
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

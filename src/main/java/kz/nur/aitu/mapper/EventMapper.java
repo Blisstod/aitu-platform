@@ -14,5 +14,7 @@ public interface EventMapper {
 
     @Mapping(target = "participants", ignore = true)
     @Mapping(target = "admins", ignore = true)
+    @Mapping(target = "clubId", source = "club.id")
+    @Mapping(target = "imageIds", expression = "java(event.getImages().stream().map(Image::getId).toList())")
     EventDto toDto(Event event);
 }

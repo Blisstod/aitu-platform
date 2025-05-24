@@ -7,6 +7,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface PostMapper {
+    @Mapping(target = "clubId", source = "club.id")
+    @Mapping(target = "userId", source = "user.id")
     PostDto toDto(Post post);
 
     Post toEntity(PostDto postDto);

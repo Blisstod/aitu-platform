@@ -6,12 +6,16 @@ import kz.nur.aitu.dto.ClubDto;
 import kz.nur.aitu.dto.UserDto;
 import kz.nur.aitu.service.ClubService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.zip.DataFormatException;
 
 @RestController
 @RequestMapping("/rest/clubs")
@@ -81,5 +85,20 @@ public class ClubController {
     @DeleteMapping("/{clubId}/members/{memberId}")
     public ResponseEntity<ClubDto> removeMember(@PathVariable UUID clubId, @PathVariable Long memberId) {
         return ResponseEntity.ok(clubService.removeMemberFromClub(clubId, memberId));
+    }
+
+    @GetMapping("/{id}/images")
+    public ResponseEntity<List<UUID>> listImages(@PathVariable UUID id) {
+        return ResponseEntity.ok(clubService.listClubImages(id));
+    }
+
+    @PostMapping("/{clubId}/images/{imageId}")
+    @Operation(summary = "Привязать существующую картинку к клубу")
+    public ResponseEntity<Void> addImage(
+            @PathVariable UUID clubId,
+            @PathVariable UUID imageId
+    ) {
+        clubService.addImageToClub(clubId, imageId);
+        return ResponseEntity.ok().build();
     }
 }

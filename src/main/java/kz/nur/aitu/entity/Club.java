@@ -5,6 +5,7 @@ import kz.nur.aitu.enums.ClubStatus;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,4 +48,13 @@ public class Club extends Auditable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ClubStatus status = ClubStatus.ACTIVE;
+
+    @ManyToMany
+    @JoinTable(
+            name = "club_images",
+            joinColumns = @JoinColumn(name = "club_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
+    @Builder.Default
+    private List<Image> images = new ArrayList<>();
 }
